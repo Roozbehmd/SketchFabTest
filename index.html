@@ -1,0 +1,266 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sketchfab Viewer Example</title>
+
+	<script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+	<link rel="stylesheet" href="css/skelet.css"> <!-- include Skelet -->
+	<link rel="stylesheet" href="css/app.css"> <!-- write all of your CSS styles here -->
+	<style>
+		// Hidden class
+		.hidden {
+			visibility: hidden;
+			height: 0;
+			width: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<header>
+			<!-- Remove this -->
+			<div class="logo">
+				<h1>Sketchfab Viewer Test</h1>
+			</div>
+
+			<nav>
+				<ul class="inline">
+					<li><a href="https://sketchfab.com">Sketchfab</a></li>
+				</ul>
+			</nav>
+			<!-- / -->
+		</header>
+		<main>
+			<article>
+				<x-grid columns="3" style="margin:0 auto; padding:2rem">
+					<x-col span="2">
+						<!-- Insert an empty iframe with attrubutes, hidden by default using a class-->
+						<iframe class="hidden" src="" id="api-frame" allow="autoplay; fullscreen; xr-spatial-tracking"
+						xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share allowfullscreen
+						mozallowfullscreen="true" webkitallowfullscreen="true"> </iframe>
+
+						<!-- Initialize the viewer -->
+						<script type="text/javascript">
+
+							var iframe = document.getElementById('api-frame');
+
+							var uid = '23630d35f855409e9c00c810b1416c71';
+							var client = null;
+							var myApi;
+							var material;
+							var prevLightIntensity = 3;
+							var setOpacity = function setOpacity(opacity) {
+								material.channels.Opacity.enable = true;
+								material.channels.Opacity.type = 'alphaBlend';
+								material.channels.Opacity.factor = opacity;
+								api.setMaterial(material, function () {
+									console.log('opacity set to ' + opacity * 100 + '%');
+								});
+							};
+
+							function loadmodel() {
+								document.addEventListener('load', () => console.log('viewerready'));
+
+                // By default, the latest version of the viewer API will be used.
+                var client = new Sketchfab(iframe);
+
+                // Alternatively, you can request a specific version.
+                // var client = new Sketchfab( '1.12.0', iframe );
+
+                client.init(uid, {
+                	success: function onSuccess(api) {
+
+                		var fadeInTimer;
+                    var fadeInterval = 20; // interval for 1% opacity change in ms
+                    myApi = api;
+                    console.log('Success');
+                    api.load();
+                    api.start();
+
+
+                    api.addEventListener('viewerready', function () {
+                    	console.log('Viewer is ready');
+                      // once the viewer is ready, show the iframe
+                      let $apiFrame = document.getElementById('api-frame');
+                      $apiFrame.classList.remove('hidden'); // Remove hidden class
+
+                      api.getEnvironment(function(err, envInfo) {
+                      	if (!err) {
+                      		window.console.log('Current environment:', envInfo);
+                      	}
+                      });
+
+
+
+
+                      document.getElementById('on').addEventListener('click', function () {
+                      	
+                      	// api.getEnvironment(function(err, envInfo) {
+                      	// 	if (!err) {
+                      	// 		//window.console.log('Current environment:', envInfo);
+
+                      	// 		prevLightIntensity = envInfo.lightIntensity;
+                      	// 		console.log("Got the env info");
+                      			
+
+                      	// 	}
+                      	// });
+                      	prevLightIntensity = prevLightIntensity *1.5;
+                      	console.log("Our Intensity is :", prevLightIntensity);
+
+                      	if(prevLightIntensity > 0){
+                      			api.setEnvironment({
+                      			//enabled: false,
+                      			//uid: '3a68a92a99d849b19829e315b93e6d55',
+                      			//exposure: 0.2,
+                      			lightIntensity: prevLightIntensity,
+                      			//rotation: 4,
+                      			//blur: 0.1,
+                      			//shadowEnabled: true
+                      		}, function() {
+                      			window.console.log('Environment changed');
+                      		});
+                      		api.getEnvironment(function(err, envInfo) {
+                      			if (!err) {
+                      				window.console.log('Current environment:', envInfo);
+
+                      				
+
+                      			}
+                      		});
+                      	}
+
+                      		
+
+                      	// console.log("Lights On requested");
+                      	// for (var iL = 0; iL < 3; iL++) {
+                      	// 	api.setLight(iL, {
+                      	// 		intensity: 1.0,
+                      	// 		color: [1,0,0]
+                      	// 	});
+                      	// }
+                      });
+
+
+
+                      document.getElementById('off').addEventListener('click', function () {
+                      	
+                      	// api.getEnvironment(function(err, envInfo) {
+                      	// 	if (!err) {
+                      	// 		//window.console.log('Current environment:', envInfo);
+
+                      	// 		prevLightIntensity = envInfo.lightIntensity;
+                      			
+
+                      	// 	}
+                      	// });
+
+                      	prevLightIntensity = prevLightIntensity/1.5;
+                      	if(prevLightIntensity > 0){
+                      		api.setEnvironment({
+                      			//enabled: false,
+                      			//uid: '3a68a92a99d849b19829e315b93e6d55',
+                      			//exposure: 0.2,
+                      			lightIntensity: prevLightIntensity,
+                      			//rotation: 4,
+                      			//blur: 0.1,
+                      			//shadowEnabled: true
+                      		}, function() {
+                      			window.console.log('Environment changed');
+                      		});
+
+                      		api.getEnvironment(function(err, envInfo) {
+                      			if (!err) {
+                      				window.console.log('Current environment:', envInfo);
+
+                      				
+
+                      			}
+                      		});
+                      	}
+                      	
+
+                      	// console.log("Lights Off requested");
+
+                      	
+                      	// for (var iL = 0; iL < 3; iL++) {
+                      	// 	api.setLight(iL, {
+                      	// 		intensity: 0.0
+                      	// 	});
+                      	// }
+                      }); 
+                  });
+
+                    // document.getElementById('testButton').addEventListener('click', function () {
+                    //   changeNodeVisibility(api, false);
+                    // });
+
+                    // function testFunctionRoozbeh() {
+
+
+
+                    // api.getEnvironment(function (err, envInfo) {
+                    //   // console.log('Current environment:', envInfo, err);
+                    //   // if (!err) {
+                    //   console.log('Current environment:', envInfo.enabled);
+                    //   // }
+                    // });
+
+                    // }
+
+
+                },
+                error: function onError(callback) {
+                	console.log(this.error);
+                }
+
+
+            });
+            }
+
+
+        </script>
+
+
+    </x-col>
+    <x-col span="1">
+    	<article id="description">
+    		<h1>3D Model Title</h1>
+    		<h2>Description</h2>
+    		<button id="shownodes" onclick="loadmodel()">CLICK to load model</button>
+    		<button id="on">Increase</button>
+    		<button id="off">Decrease</button>
+
+    		<!-- <button id="fade">Fade</button> -->
+
+    		<p>
+    			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+    			dolore magna aliqua. Felis donec et odio pellentesque diam volutpat commodo. Quis eleifend quam
+    			adipiscing vitae proin sagittis nisl. Pharetra massa massa ultricies mi quis. Consequat nisl vel pretium
+    			lectus quam id. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Auctor elit sed vulputate
+    			mi sit amet mauris commodo. Dolor sit amet consectetur adipiscing elit. Non arcu risus quis varius quam
+    			quisque id. Pellentesque diam volutpat commodo sed egestas egestas fringilla. Amet commodo nulla
+    			facilisi nullam vehicula. In arcu cursus euismod quis. Eu scelerisque felis imperdiet proin fermentum
+    			leo. Placerat in egestas erat imperdiet. Magna fringilla urna porttitor rhoncus. Augue ut lectus arcu
+    			bibendum at varius. Nisi porta lorem mollis aliquam ut.
+    		</p>
+    		<hr>
+    		<p>
+    			Sed viverra tellus in hac habitasse platea dictumst vestibulum rhoncus. Eget mauris pharetra et ultrices
+    			neque ornare. Faucibus interdum posuere lorem ipsum dolor sit amet. Sed blandit libero volutpat sed
+    			cras. Nisi scelerisque eu ultrices vitae auctor eu augue.
+    		</p>
+
+    	</article>
+    </x-col>
+</article>
+</main>
+</div>
+<!--app-->
+</body>
+
+</html>
