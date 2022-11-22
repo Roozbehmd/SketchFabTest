@@ -145,7 +145,19 @@
                       	// }
                       });
 
-
+                      document.getElementById('background').addEventListener('click', function () {
+                              var randBgR = Math.random();
+                              var randBgG = Math.random();
+                              var randBgB = Math.random();
+                              var randBgA = Math.random();
+                              var color = [randBgR, randBgG, randBgB, randBgA];
+                              api.setBackground({
+                                color: [randBgR, randBgG, randBgB, randBgA]
+                              }, function () {
+                                console.log('updated background');
+                              });
+                              console.log(color);
+                            });
 
                       document.getElementById('off').addEventListener('click', function () {
                       	
@@ -232,9 +244,9 @@
     		<h1>3D Model Title</h1>
     		<h2>Description</h2>
     		<button id="shownodes" onclick="loadmodel()">CLICK to load model</button>
-    		<button id="on">Increase</button>
-    		<button id="off">Decrease</button>
-
+    		<button id="on">Increase Light</button>
+    		<button id="off">Decrease Light</button>
+        <button id="background">Background</button>
     		<!-- <button id="fade">Fade</button> -->
 
     		<p>
