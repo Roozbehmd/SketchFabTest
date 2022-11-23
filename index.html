@@ -158,6 +158,30 @@
 
                       });
 
+                      document.getElementById('wireframe').addEventListener('click', function () {
+
+                        api.getWireframe(function(err, state) {
+                            if (state.enabled) {
+                              api.setWireframe(false, {color: 'FF0000FF'}, function(err) {
+                                  if (!err) {
+                                      window.console.log('Set wireframe');
+                                  }
+                              });
+
+                            }
+                            else{
+                              api.setWireframe(true, {color: 'FF0000FF'}, function(err) {
+                                  if (!err) {
+                                      window.console.log('Set wireframe');
+                                  }
+                              });
+                            }
+                        });
+
+
+
+                      });
+
 
                       document.getElementById('on').addEventListener('click', function () {
                       	
@@ -269,6 +293,9 @@
                       		});
                       	}
                       }); 
+
+
+
                   });
 
                     // document.getElementById('testButton').addEventListener('click', function () {
@@ -305,8 +332,7 @@
     </x-col>
     <x-col span="1">
     	<article id="description">
-    		<h1>3D Model Title</h1>
-    		<h2>Description</h2>
+    		<h1>The Moon</h1>
     		<button id="shownodes" onclick="loadmodel()">CLICK to load model</button>
     		<button id="on">Increase Light</button>
     		<button id="off">Decrease Light</button>
@@ -314,10 +340,12 @@
         <button id="light2">Light 2</button>
         <button id="light3">Light 3</button>
         <button id="background">Background</button>
+        <button id="wireframe">Wireframe</button>
+
     		<!-- <button id="fade">Fade</button> -->
 
     		<p>
-    			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+    			This is a test! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
     			dolore magna aliqua. Felis donec et odio pellentesque diam volutpat commodo. Quis eleifend quam
     			adipiscing vitae proin sagittis nisl. Pharetra massa massa ultricies mi quis. Consequat nisl vel pretium
     			lectus quam id. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Auctor elit sed vulputate
