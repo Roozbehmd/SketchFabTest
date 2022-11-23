@@ -48,7 +48,7 @@
 
 							var iframe = document.getElementById('api-frame');
 
-							var uid = '23630d35f855409e9c00c810b1416c71';
+							var uid = '65b8e42261ee4e09ae26f811ae981864';
 							var client = null;
 							var myApi;
 							var material;
@@ -91,10 +91,72 @@
                       api.getEnvironment(function(err, envInfo) {
                       	if (!err) {
                       		window.console.log('Current environment:', envInfo);
+                          prevLightIntensity = envInfo.lightIntensity;
                       	}
                       });
 
+                      document.getElementById('light1').addEventListener('click', function () {
 
+                        api.getLight(1, function(err, state) {
+                            if(state.enabled){
+                              api.setLight(1, {
+                                enabled: false
+                                //color: [1,0,0]
+                              });
+                            }
+
+                            else{
+                              api.setLight(1, {
+                                enabled: true
+                                //color: [1,0,0]
+                              });
+                            }
+                        });
+
+
+                      });
+
+                      document.getElementById('light2').addEventListener('click', function () {
+
+                        api.getLight(2, function(err, state) {
+                            if(state.enabled){
+                              api.setLight(2, {
+                                enabled: false
+                                //color: [1,0,0]
+                              });
+                            }
+
+                            else{
+                              api.setLight(2, {
+                                enabled: true
+                                //color: [1,0,0]
+                              });
+                            }
+                        });
+
+
+                      });
+
+                      document.getElementById('light3').addEventListener('click', function () {
+
+                        api.getLight(0, function(err, state) {
+                            if(state.enabled){
+                              api.setLight(0, {
+                                enabled: false
+                                //color: [1,0,0]
+                              });
+                            }
+
+                            else{
+                              api.setLight(0, {
+                                enabled: true
+                                //color: [1,0,0]
+                              });
+                            }
+                        });
+
+
+                      });
 
 
                       document.getElementById('on').addEventListener('click', function () {
@@ -134,15 +196,17 @@
                       		});
                       	}
 
+                        console.log("Lights On requested");
+                        for (var iL = 0; iL < 3; iL++) {
+                          api.setLight(iL, {
+                            intensity: prevLightIntensity
+                            //color: [1,0,0]
+                          });
+                        }
+
                       		
 
-                      	// console.log("Lights On requested");
-                      	// for (var iL = 0; iL < 3; iL++) {
-                      	// 	api.setLight(iL, {
-                      	// 		intensity: 1.0,
-                      	// 		color: [1,0,0]
-                      	// 	});
-                      	// }
+
                       });
 
                       document.getElementById('background').addEventListener('click', function () {
@@ -196,14 +260,14 @@
                       	}
                       	
 
-                      	// console.log("Lights Off requested");
+                      	console.log("Lights Off requested");
 
                       	
-                      	// for (var iL = 0; iL < 3; iL++) {
-                      	// 	api.setLight(iL, {
-                      	// 		intensity: 0.0
-                      	// 	});
-                      	// }
+                      	for (var iL = 0; iL < 3; iL++) {
+                      		api.setLight(iL, {
+                      			intensity: prevLightIntensity
+                      		});
+                      	}
                       }); 
                   });
 
@@ -246,6 +310,9 @@
     		<button id="shownodes" onclick="loadmodel()">CLICK to load model</button>
     		<button id="on">Increase Light</button>
     		<button id="off">Decrease Light</button>
+        <button id="light1">Light 1</button>
+        <button id="light2">Light 2</button>
+        <button id="light3">Light 3</button>
         <button id="background">Background</button>
     		<!-- <button id="fade">Fade</button> -->
 
