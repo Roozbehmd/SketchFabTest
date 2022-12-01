@@ -47,11 +47,29 @@
 						<script type="text/javascript">
 
 							var iframe = document.getElementById('api-frame');
+              var canvas = document.createElement('canvas');
 
-							var uid = '65b8e42261ee4e09ae26f811ae981864';
+              var ctx = canvas.getContext('2d');
+							var uid = '2cd97dd6e22a4595a07d15e640baa340';
 							var client = null;
 							var material;
 							var prevLightIntensity = 3;
+              var prevExposure = 1;
+              var isMyNodeHidden = false;
+              var myMaterials;
+              var myMaterialsAreBlue = false;
+              var texturesAreEnabled = true;
+
+              //MATERIAL TEXTURE STUFF
+              var getColorAsTextureURL = function getColorAsTextureURL(color) {
+                ctx.fillStyle = color;
+                ctx.fillRect(0, 0, 2, 2);
+                return canvas.toDataURL('image/png', 1.0);
+              };
+
+              var blackTextureURL = getColorAsTextureURL('black');
+              var blackTextureUID;
+
 							var setOpacity = function setOpacity(opacity) {
 								material.channels.Opacity.enable = true;
 								material.channels.Opacity.type = 'alphaBlend';
@@ -90,25 +108,39 @@
                       	if (!err) {
                       		window.console.log('Current environment:', envInfo);
                           prevLightIntensity = envInfo.lightIntensity;
-                      	}
+                        }
+                      });
+
+                      var textures = [];
+                      api.addTexture(blackTextureURL, function (err, textureId) {
+                        blackTextureUID = textureId;
+                      });
+                      api.getMaterialList(function (err, materials) {
+                        myMaterials = materials;
+
+                        for (var i = 0; i < myMaterials.length; i++) {
+                          var m = myMaterials[i];
+                          textures[m.name] = m.channels.AlbedoPBR.texture;
+                          //console.log(m.name, m);
+                        }
                       });
 
                       document.getElementById('light1').addEventListener('click', function () {
 
                         api.getLight(1, function(err, state) {
-                            if(state.enabled){
-                              api.setLight(1, {
-                                enabled: false
+                          if(state.enabled){
+                            api.setLight(1, {
+                              enabled: false
                                 //color: [1,0,0]
                               });
-                            }
+                          }
 
-                            else{
-                              api.setLight(1, {
-                                enabled: true
+                          else{
+                            api.setLight(1, {
+                              enabled: true
                                 //color: [1,0,0]
                               });
-                            }
+                          }
                         });
 
 
@@ -117,19 +149,19 @@
                       document.getElementById('light2').addEventListener('click', function () {
 
                         api.getLight(2, function(err, state) {
-                            if(state.enabled){
-                              api.setLight(2, {
-                                enabled: false
+                          if(state.enabled){
+                            api.setLight(2, {
+                              enabled: false
                                 //color: [1,0,0]
                               });
-                            }
+                          }
 
-                            else{
-                              api.setLight(2, {
-                                enabled: true
+                          else{
+                            api.setLight(2, {
+                              enabled: true
                                 //color: [1,0,0]
                               });
-                            }
+                          }
                         });
 
 
@@ -138,42 +170,56 @@
                       document.getElementById('light3').addEventListener('click', function () {
 
                         api.getLight(0, function(err, state) {
-                            if(state.enabled){
-                              api.setLight(0, {
-                                enabled: false
+                          if(state.enabled){
+                            api.setLight(0, {
+                              enabled: false
                                 //color: [1,0,0]
                               });
-                            }
+                          }
 
-                            else{
-                              api.setLight(0, {
-                                enabled: true
+                          else{
+                            api.setLight(0, {
+                              enabled: true
                                 //color: [1,0,0]
                               });
-                            }
+                          }
                         });
 
 
                       });
 
+                      document.getElementById('blueMaterial').addEventListener('click',function () {
+                        
+                        for (var i = 0; i < myMaterials.length; i++) {
+                                var m = myMaterials[i]; // here change only the channel you need to change
+
+                                m.channels.EmitColor.factor = 1;
+                                m.channels.EmitColor.enable = !myMaterialsAreBlue;
+                               
+                                m.channels.EmitColor.color = [0.0, 0.0, 1.0];
+                                api.setMaterial(m);
+                        }
+                        myMaterialsAreBlue = !myMaterialsAreBlue;
+                      });
+
                       document.getElementById('wireframe').addEventListener('click', function () {
 
                         api.getWireframe(function(err, state) {
-                            if (state.enabled) {
-                              api.setWireframe(false, {color: 'FF0000FF'}, function(err) {
-                                  if (!err) {
-                                      window.console.log('Set wireframe');
-                                  }
-                              });
+                          if (state.enabled) {
+                            api.setWireframe(false, {color: 'FF0000FF'}, function(err) {
+                              if (!err) {
+                                window.console.log('Set wireframe');
+                              }
+                            });
 
-                            }
-                            else{
-                              api.setWireframe(true, {color: 'FF0000FF'}, function(err) {
-                                  if (!err) {
-                                      window.console.log('Set wireframe');
-                                  }
-                              });
-                            }
+                          }
+                          else{
+                            api.setWireframe(true, {color: 'FF0000FF'}, function(err) {
+                              if (!err) {
+                                window.console.log('Set wireframe');
+                              }
+                            });
+                          }
                         });
 
 
@@ -189,7 +235,7 @@
 
                       	// 		prevLightIntensity = envInfo.lightIntensity;
                       	// 		console.log("Got the env info");
-                      			
+
 
                       	// 	}
                       	// });
@@ -197,7 +243,7 @@
                       	console.log("Our Intensity is :", prevLightIntensity);
 
                       	if(prevLightIntensity > 0){
-                      			api.setEnvironment({
+                         api.setEnvironment({
                       			//enabled: false,
                       			//uid: '3a68a92a99d849b19829e315b93e6d55',
                       			//exposure: 0.2,
@@ -208,42 +254,138 @@
                       		}, function() {
                       			window.console.log('Environment changed');
                       		});
-                      		api.getEnvironment(function(err, envInfo) {
-                      			if (!err) {
-                      				window.console.log('Current environment:', envInfo);
+                         api.getEnvironment(function(err, envInfo) {
+                           if (!err) {
+                            window.console.log('Current environment:', envInfo);
 
-                      				
 
-                      			}
-                      		});
-                      	}
 
-                        console.log("Lights On requested");
-                        for (var iL = 0; iL < 3; iL++) {
-                          api.setLight(iL, {
-                            intensity: prevLightIntensity
+                          }
+                        });
+                       }
+
+                       console.log("Lights On requested");
+                       for (var iL = 0; iL < 3; iL++) {
+                        api.setLight(iL, {
+                          intensity: prevLightIntensity
                             //color: [1,0,0]
                           });
-                        }
+                      }
 
-                      		
+
+
+
+                    });
+
+
+                      document.getElementById('onExposure').addEventListener('click', function () {
+
+
+                         prevExposure = prevExposure *1.2;
+                         console.log("Our Exposure is :", prevExposure);
+
+                         if(prevExposure > 0){
+                          api.setEnvironment({
+                               //enabled: false,
+                               //uid: '3a68a92a99d849b19829e315b93e6d55',
+                               exposure: prevExposure,
+                               //lightIntensity: prevLightIntensity,
+                               //rotation: 4,
+                               //blur: 0.1,
+                               //shadowEnabled: true
+                             }, );
+                          
+                        }
+                     });
+
+                       document.getElementById('offExposure').addEventListener('click', function () {
+                         
+
+                         prevExposure = prevExposure /1.2;
+                         console.log("Our Exposure is :", prevExposure);
+
+                         if(prevExposure > 0){
+                          api.setEnvironment({
+                               //enabled: false,
+                               //uid: '3a68a92a99d849b19829e315b93e6d55',
+                               exposure: prevExposure,
+                               //lightIntensity: prevLightIntensity,
+                               //rotation: 4,
+                               //blur: 0.1,
+                               //shadowEnabled: true
+                             }, );
+                          
+                        }
+                      });
+
+                      document.getElementById('background').addEventListener('click', function () {
+                        var randBgR = Math.random();
+                        var randBgG = Math.random();
+                        var randBgB = Math.random();
+                        var randBgA = Math.random();
+                        var color = [randBgR, randBgG, randBgB, randBgA];
+                        api.setBackground({
+                          color: [randBgR, randBgG, randBgB, randBgA]
+                        }, function () {
+                          console.log('updated background');
+                        });
+                        console.log(color);
+                      });
+
+
+                      document.getElementById('removeTextures').addEventListener('click', function () {
+                    
+                        for (var i = 0; i < myMaterials.length; i++) {
+                          var m = myMaterials[i];
+                          m.channels.AlbedoPBR.enable = true;
+                          console.log('Material: ', m);
+                          if (!texturesAreEnabled) {
+                            console.log(textures[m.name]);
+                            m.channels.AlbedoPBR.texture = textures[m.name];
+                                    m.channels.AlbedoPBR.color = false; //api.updateTexture(url, m.channels.AlbedoPBR.texture.uid,
+                                    // function(  ) {
+                                    //   api.setMaterial(m);
+                                    //}
+                                    //);
+                                  } 
+                                  else {
+                                    m.channels.AlbedoPBR.texture = false;
+                                    m.channels.AlbedoPBR.color = [1, 1, 1, 0];
+                                  }
+
+
+                                  api.setMaterial(m);
+                                }
+                          texturesAreEnabled = !texturesAreEnabled;
 
 
                       });
 
-                      document.getElementById('background').addEventListener('click', function () {
-                              var randBgR = Math.random();
-                              var randBgG = Math.random();
-                              var randBgB = Math.random();
-                              var randBgA = Math.random();
-                              var color = [randBgR, randBgG, randBgB, randBgA];
-                              api.setBackground({
-                                color: [randBgR, randBgG, randBgB, randBgA]
-                              }, function () {
-                                console.log('updated background');
-                              });
-                              console.log(color);
-                            });
+                      document.getElementById('removePart').addEventListener('click', function () {
+                        var myNode = 0;
+
+
+                        if(isMyNodeHidden){
+                          api.show(myNode, function(err) {
+                              if (!err) {
+                                  window.console.log('Hid node', myNode); // 114
+                                  isMyNodeHidden = false;
+                              }
+                          });
+                        }
+
+                        else{
+                          api.hide(myNode, function(err) {
+                              if (!err) {
+                                  window.console.log('Showed node', myNode); // 114
+                                  isMyNodeHidden = true;
+                              }
+                          });
+                        }
+
+
+
+                      });
 
                       document.getElementById('off').addEventListener('click', function () {
                       	
@@ -252,7 +394,7 @@
                       	// 		//window.console.log('Current environment:', envInfo);
 
                       	// 		prevLightIntensity = envInfo.lightIntensity;
-                      			
+
 
                       	// 	}
                       	// });
@@ -294,7 +436,7 @@
 
 
 
-                  });
+                    });
 
                     // document.getElementById('testButton').addEventListener('click', function () {
                     //   changeNodeVisibility(api, false);
@@ -314,54 +456,62 @@
                     // }
 
 
-                },
-                error: function onError(callback) {
-                	console.log(this.error);
-                }
+                  },
+                  error: function onError(callback) {
+                   console.log(this.error);
+                 }
 
 
-            });
-            }
+               });
+}
 
 
-        </script>
+</script>
 
 
-    </x-col>
-    <x-col span="1">
-    	<article id="description">
-    		<h1>The Moon</h1>
-    		<button id="shownodes" onclick="loadmodel()">CLICK to load model</button>
-    		<button id="on">Increase Light</button>
-    		<button id="off">Decrease Light</button>
-        <button id="light1">Light 1</button>
-        <button id="light2">Light 2</button>
-        <button id="light3">Light 3</button>
-        <button id="background">Background</button>
-        <button id="wireframe">Wireframe</button>
+</x-col>
+<x-col span="1">
+ <article id="description">
+  <h1>SKETCHFAB</h1>
+  <button id="shownodes" onclick="loadmodel()">CLICK to load model</button>
+  <button id="on">Increase Light</button>
+  <button id="off">Decrease Light</button>
+  <button id="onExposure">Increase Exposure</button>
+  <button id="offExposure">Decrease Exposure</button>
+  <button id="light1">Light 1</button>
+  <button id="light2">Light 2</button>
+  <button id="light3">Light 3</button>
+  <button id="background">Background</button>
+  <button id="wireframe">Wireframe</button>
+  <button id="removePart">Remove Object</button>
+  <button id="blueMaterial">Blue Material</button>
+  <button id="removeTextures">Remove Textures</button>
 
-    		<!-- <button id="fade">Fade</button> -->
 
-    		<p>
-    			This is a test! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-    			dolore magna aliqua. Felis donec et odio pellentesque diam volutpat commodo. Quis eleifend quam
-    			adipiscing vitae proin sagittis nisl. Pharetra massa massa ultricies mi quis. Consequat nisl vel pretium
-    			lectus quam id. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Auctor elit sed vulputate
-    			mi sit amet mauris commodo. Dolor sit amet consectetur adipiscing elit. Non arcu risus quis varius quam
-    			quisque id. Pellentesque diam volutpat commodo sed egestas egestas fringilla. Amet commodo nulla
-    			facilisi nullam vehicula. In arcu cursus euismod quis. Eu scelerisque felis imperdiet proin fermentum
-    			leo. Placerat in egestas erat imperdiet. Magna fringilla urna porttitor rhoncus. Augue ut lectus arcu
-    			bibendum at varius. Nisi porta lorem mollis aliquam ut.
-    		</p>
-    		<hr>
-    		<p>
-    			Sed viverra tellus in hac habitasse platea dictumst vestibulum rhoncus. Eget mauris pharetra et ultrices
-    			neque ornare. Faucibus interdum posuere lorem ipsum dolor sit amet. Sed blandit libero volutpat sed
-    			cras. Nisi scelerisque eu ultrices vitae auctor eu augue.
-    		</p>
 
-    	</article>
-    </x-col>
+
+  <!-- <button id="fade">Fade</button> -->
+
+  <p>
+   This is a test! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+   dolore magna aliqua. Felis donec et odio pellentesque diam volutpat commodo. Quis eleifend quam
+   adipiscing vitae proin sagittis nisl. Pharetra massa massa ultricies mi quis. Consequat nisl vel pretium
+   lectus quam id. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Auctor elit sed vulputate
+   mi sit amet mauris commodo. Dolor sit amet consectetur adipiscing elit. Non arcu risus quis varius quam
+   quisque id. Pellentesque diam volutpat commodo sed egestas egestas fringilla. Amet commodo nulla
+   facilisi nullam vehicula. In arcu cursus euismod quis. Eu scelerisque felis imperdiet proin fermentum
+   leo. Placerat in egestas erat imperdiet. Magna fringilla urna porttitor rhoncus. Augue ut lectus arcu
+   bibendum at varius. Nisi porta lorem mollis aliquam ut.
+ </p>
+ <hr>
+ <p>
+   Sed viverra tellus in hac habitasse platea dictumst vestibulum rhoncus. Eget mauris pharetra et ultrices
+   neque ornare. Faucibus interdum posuere lorem ipsum dolor sit amet. Sed blandit libero volutpat sed
+   cras. Nisi scelerisque eu ultrices vitae auctor eu augue.
+ </p>
+
+</article>
+</x-col>
 </article>
 </main>
 </div>
