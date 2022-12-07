@@ -238,9 +238,29 @@
                     myApi = api;
 
                     api.addEventListener('viewerready', function () {
-                    	myApi.getLight(0, function(err, state) {light3Matrix = state.matrix;});
-                    	myApi.getLight(1, function(err, state) {light1Matrix = state.matrix;});
-                    	myApi.getLight(2, function(err, state) {light2Matrix = state.matrix;});
+
+                    	//get light APIs
+                    	myApi.getLight(0, function(err, state) {
+                    		light3Matrix = state.matrix;
+                    		light3PositionXSlider.value = light3Matrix[12];
+                    		light3PositionYSlider.value = light3Matrix[13];
+                    		light3PositionZSlider.value = light3Matrix[14];
+                    	});
+
+                    	myApi.getLight(1, function(err, state) {
+                    		light1Matrix = state.matrix;
+                    		light1PositionXSlider.value = light1Matrix[12];
+                    		light1PositionYSlider.value = light1Matrix[13];
+                    		light1PositionZSlider.value = light1Matrix[14];
+                    	});
+
+                    	myApi.getLight(2, function(err, state) {
+                    		light2Matrix = state.matrix;
+                    		light2PositionXSlider.value = light2Matrix[12];
+                    		light2PositionYSlider.value = light2Matrix[13];
+                    		light2PositionZSlider.value = light2Matrix[14];
+                    	});
+
                     	console.log('Viewer is ready');
                       // once the viewer is ready, show the iframe
                       let $apiFrame = document.getElementById('api-frame');
@@ -347,35 +367,35 @@
 
                       	});
 
-                      document.getElementById('light3Move').addEventListener('click', function () {
+                      // document.getElementById('light3Move').addEventListener('click', function () {
 
-                      	api.getLight(0, function(err, state) {
-                      		light3Matrix = state.matrix;
+                      // 	api.getLight(0, function(err, state) {
+                      // 		light3Matrix = state.matrix;
 
-                      	});
-                      	window.console.log('before' ,light3Matrix);
-                      	light3Matrix[12] = light3Matrix[12]+1;
-                      	light3Matrix[13] = light3Matrix[13]+1;
+                      // 	});
+                      // 	window.console.log('before' ,light3Matrix);
+                      // 	light3Matrix[12] = light3Matrix[12]+1;
+                      // 	light3Matrix[13] = light3Matrix[13]+1;
 
-                      	light3Matrix[14] = light3Matrix[14]+1;
-
-
-
-                      	window.console.log('after',light3Matrix);
+                      // 	light3Matrix[14] = light3Matrix[14]+1;
 
 
 
-                      	api.setLight(0,{
-                      		matrix:light3Matrix
-
-                      	});	
+                      // 	window.console.log('after',light3Matrix);
 
 
+
+                      // 	api.setLight(0,{
+                      // 		matrix:light3Matrix
+
+                      // 	});	
 
 
 
 
-                      	});
+
+
+                      // 	});
 
                       document.getElementById('blueMaterial').addEventListener('click',function () {
                         
@@ -675,19 +695,19 @@
 <!-- Light 1 -->
   <h2>Light 1</h2>
   <button id="light1">Light 1</button>
-  <p>Light 1 X position</p>
+  <p>X position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionXSlider">
     <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
   </div>
 
-  <p>Light 1 Y position</p>
+  <p>Y position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionYSlider">
     <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
   </div>
 
-  <p>Light 1 Z position</p>
+  <p>Z position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionZSlider">
     <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
@@ -695,19 +715,19 @@
 
 <!-- Light 2 -->
   <button id="light2">Light 2</button>
-  <p>Light 2 X position</p>
+  <p>X position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionXSlider">
     <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
   </div>
 
-  <p>Light 2 Y position</p>
+  <p>Y position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionYSlider">
     <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
   </div>
 
-  <p>Light 2 Z position</p>
+  <p>Z position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionZSlider">
     <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
@@ -716,25 +736,25 @@
 <!-- Light 3 -->
   <h2>Light 3</h2>
   <button id="light3">Light 3</button>
-  <p>Light 3 X position</p>
+  <p>X position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionXSlider">
     <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
   </div>
 
-  <p>Light 3 Y position</p>
+  <p>Y position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionYSlider">
     <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
   </div>
 
-  <p>Light 3 Z position</p>
+  <p>Z position</p>
   <div class="slidecontainer" >
     <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionZSlider">
     <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
   </div>
   <button id="light3Rand">Light 3 Random Color</button>
-  <button id="light3Move">Light 3 Random Position</button>
+  <!-- <button id="light3Move">Light 3 Random Position</button> -->
 
   <button id="background">Background</button>
   <button id="wireframe">Wireframe</button>
