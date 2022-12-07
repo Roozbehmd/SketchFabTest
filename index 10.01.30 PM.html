@@ -59,11 +59,9 @@
               var myMaterials;
               var myMaterialsAreBlue = false;
               var texturesAreEnabled = true;
-              var light1Matrix; 
-              var light2Matrix; 
               var light3Matrix; 
+              var light3PositionXSlider = document.getElementById("light3PositionXSlider");
 
-              var myApi;
 
 
               //MATERIAL TEXTURE STUFF
@@ -94,153 +92,26 @@
                 // Alternatively, you can request a specific version.
                 // var client = new Sketchfab( '1.12.0', iframe );
 
-                //Change Light Positions
-                var light1PositionXSlider = document.getElementById("light1PositionXSlider");
-                var light1PositionYSlider = document.getElementById("light1PositionYSlider");
-                var light1PositionZSlider = document.getElementById("light1PositionZSlider");
+                var slider = document.getElementById("light3PositionXSlider");
+                var output = document.getElementById("light3PositionXSlider");
+                output.innerHTML = slider.value;
 
-                var light2PositionXSlider = document.getElementById("light2PositionXSlider");
-                var light2PositionYSlider = document.getElementById("light2PositionYSlider");
-                var light2PositionZSlider = document.getElementById("light2PositionZSlider");
-
-                var light3PositionXSlider = document.getElementById("light3PositionXSlider");
-                var light3PositionYSlider = document.getElementById("light3PositionYSlider");
-                var light3PositionZSlider = document.getElementById("light3PositionZSlider");
-
-                //var output = document.getElementById("light3PositionXSlider");
-                //output.innerHTML = "100";
-
-                light1PositionXSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(1, function(err, state) {
-                  	light1Matrix = state.matrix;
-
-                  });
-                  light1Matrix[12] = this.value;
-                  myApi.setLight(1,{
-                  	matrix:light1Matrix
-
-                  });	
-                }
-
-                light1PositionYSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(1, function(err, state) {
-                  	light1Matrix = state.matrix;
-
-                  });
-                  light1Matrix[13] = this.value;
-                  myApi.setLight(1,{
-                  	matrix:light1Matrix
-
-                  });	
-                }
-
-                light1PositionZSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(1, function(err, state) {
-                  	light1Matrix = state.matrix;
-
-                  });
-                  light1Matrix[14] = this.value;
-                  myApi.setLight(1,{
-                  	matrix:light1Matrix
-
-                  });	
-                }
-
-                light2PositionXSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(2, function(err, state) {
-                  	light2Matrix = state.matrix;
-
-                  });
-                  light2Matrix[12] = this.value;
-                  myApi.setLight(2,{
-                  	matrix:light2Matrix
-
-                  });	
-                }
-
-                light2PositionYSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(2, function(err, state) {
-                  	light2Matrix = state.matrix;
-
-                  });
-                  light2Matrix[13] = this.value;
-                  myApi.setLight(2,{
-                  	matrix:light2Matrix
-
-                  });	
-                }
-
-                light2PositionZSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(2, function(err, state) {
-                  	light2Matrix = state.matrix;
-
-                  });
-                  light2Matrix[14] = this.value;
-                  myApi.setLight(2,{
-                  	matrix:light2Matrix
-
-                  });	
-                }
-
-                light3PositionXSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(0, function(err, state) {
-                  	light3Matrix = state.matrix;
-
-                  });
-                  light3Matrix[12] = this.value;
-                  myApi.setLight(0,{
-                  	matrix:light3Matrix
-
-                  });	
-                }
-
-                light3PositionYSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(0, function(err, state) {
-                  	light3Matrix = state.matrix;
-
-                  });
-                  light3Matrix[13] = this.value;
-                  myApi.setLight(0,{
-                  	matrix:light3Matrix
-
-                  });	
-                }
-
-                light3PositionZSlider.oninput = function() {
-                  //output.innerHTML = this.value;
-                  myApi.getLight(0, function(err, state) {
-                  	light3Matrix = state.matrix;
-
-                  });
-                  light3Matrix[14] = this.value;
-                  myApi.setLight(0,{
-                  	matrix:light3Matrix
-
-                  });	
+                slider.oninput = function() {
+                  output.innerHTML = this.value;
+                  console.log("Slider Changed Value: ", this.value);
                 }
 
                 client.init(uid, {
                 	success: function onSuccess(api) {
 
-                	var fadeInTimer;
+                		var fadeInTimer;
                     var fadeInterval = 20; // interval for 1% opacity change in ms
                     console.log('Success');
                     api.load();
                     api.start();
-                    myApi = api;
+
 
                     api.addEventListener('viewerready', function () {
-                    	myApi.getLight(0, function(err, state) {light3Matrix = state.matrix;});
-                    	myApi.getLight(1, function(err, state) {light1Matrix = state.matrix;});
-                    	myApi.getLight(2, function(err, state) {light2Matrix = state.matrix;});
                     	console.log('Viewer is ready');
                       // once the viewer is ready, show the iframe
                       let $apiFrame = document.getElementById('api-frame');
@@ -671,67 +542,14 @@
   <button id="off">Decrease Light</button>
   <button id="onExposure">Increase Exposure</button>
   <button id="offExposure">Decrease Exposure</button>
-
-<!-- Light 1 -->
-  <h2>Light 1</h2>
   <button id="light1">Light 1</button>
-  <p>Light 1 X position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionXSlider">
-    <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
-  </div>
-
-  <p>Light 1 Y position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionYSlider">
-    <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
-  </div>
-
-  <p>Light 1 Z position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionZSlider">
-    <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
-  </div>
-
-<!-- Light 2 -->
   <button id="light2">Light 2</button>
-  <p>Light 2 X position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionXSlider">
-    <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
-  </div>
-
-  <p>Light 2 Y position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionYSlider">
-    <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
-  </div>
-
-  <p>Light 2 Z position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionZSlider">
-    <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
-  </div>
-
-<!-- Light 3 -->
   <h2>Light 3</h2>
+
   <button id="light3">Light 3</button>
-  <p>Light 3 X position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionXSlider">
-    <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
-  </div>
-
-  <p>Light 3 Y position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionYSlider">
-    <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
-  </div>
-
-  <p>Light 3 Z position</p>
-  <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionZSlider">
-    <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
+    <input type="range" min="1" max="100" value="50" class="slider" id="light3PositionXSlider">
+    <p>Value: <span id="light3PositionXSliderValue"></span></p>
   </div>
   <button id="light3Rand">Light 3 Random Color</button>
   <button id="light3Move">Light 3 Random Position</button>
@@ -748,7 +566,21 @@
   <!-- <button id="fade">Fade</button> -->
 
   <p>
-   This is a test! 
+   This is a test! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+   dolore magna aliqua. Felis donec et odio pellentesque diam volutpat commodo. Quis eleifend quam
+   adipiscing vitae proin sagittis nisl. Pharetra massa massa ultricies mi quis. Consequat nisl vel pretium
+   lectus quam id. Feugiat in ante metus dictum at tempor commodo ullamcorper a. Auctor elit sed vulputate
+   mi sit amet mauris commodo. Dolor sit amet consectetur adipiscing elit. Non arcu risus quis varius quam
+   quisque id. Pellentesque diam volutpat commodo sed egestas egestas fringilla. Amet commodo nulla
+   facilisi nullam vehicula. In arcu cursus euismod quis. Eu scelerisque felis imperdiet proin fermentum
+   leo. Placerat in egestas erat imperdiet. Magna fringilla urna porttitor rhoncus. Augue ut lectus arcu
+   bibendum at varius. Nisi porta lorem mollis aliquam ut.
+ </p>
+ <hr>
+ <p>
+   Sed viverra tellus in hac habitasse platea dictumst vestibulum rhoncus. Eget mauris pharetra et ultrices
+   neque ornare. Faucibus interdum posuere lorem ipsum dolor sit amet. Sed blandit libero volutpat sed
+   cras. Nisi scelerisque eu ultrices vitae auctor eu augue.
  </p>
 
 </article>
