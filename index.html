@@ -50,7 +50,7 @@
               var canvas = document.createElement('canvas');
 
               var ctx = canvas.getContext('2d');
-							var uid = '65b8e42261ee4e09ae26f811ae981864';
+							var uid = 'cc4eac6847b84ecbbfcd6cd5f25f136e';
 							var client = null;
 							var material;
 							var prevLightIntensity = 3;
@@ -62,6 +62,8 @@
               var light1Matrix; 
               var light2Matrix; 
               var light3Matrix; 
+
+              var light1HelperNode = 34;
 
               var myApi;
 
@@ -84,6 +86,60 @@
 									console.log('opacity set to ' + opacity * 100 + '%');
 								});
 							};
+
+              function updateLight1HelperPosition(){
+                // var rootMatrix = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1];
+                // myApi.setMatrix(0, rootMatrix, function(err) {
+                //     if (!err) {
+                //         window.console.log('Root Matrix set',);
+                //     }
+                // });
+
+                // myApi.getMatrix(0, function(err, matrix) {
+                //     if (!err) {
+                //         window.console.log('Root Matrix:', matrix);
+                //     }
+                //     if (err) {
+                //         window.console.log(err);
+                //     }
+                // });
+
+
+
+                myApi.getMatrix(light1HelperNode, function(err, matrix) {
+                    if (!err) {
+                        //window.console.log('Matrix:', matrix);
+                    }
+                    if (err) {
+                        window.console.log(err);
+                    }
+                });
+
+                // var myLight1HelperMatrix = light1Matrix.slice();
+                // for(let i = 0; i < light1Matrix.length-1 ; i++){
+                //   myLight1HelperMatrix[i] = light1Matrix[i]*100;
+                // }
+                // myApi.setMatrix(light1HelperNode, myLight1HelperMatrix, function(err) {
+                //     if (!err) {
+                //         window.console.log('Matrix set');
+                //     }
+                // });
+
+                // window.console.log('light 1 matrix: ', light1Matrix, ' helper: ', myLight1HelperMatrix);
+
+                window.console.log(light1Matrix[12], ' ', light1Matrix[13], ' ', light1Matrix[14]);
+                myApi.translate(light1HelperNode, [light1Matrix[12]*100,light1Matrix[14]*100,light1Matrix[13]*-100], {
+                    // duration: 0.1,
+                    // easing: 'easeOutQuad'
+                }, function(err, translateTo) {
+                    if (!err) {
+                        // window.console.log('Object has been translated to', translateTo);
+                    }
+                    if (err) {
+                        window.console.log(err);
+                    }
+                });
+              }
 
 							function loadmodel() {
 								document.addEventListener('load', () => console.log('viewerready'));
@@ -111,19 +167,27 @@
                 //output.innerHTML = "100";
 
                 light1PositionXSlider.oninput = function() {
-                  //output.innerHTML = this.value;
+
+
                   myApi.getLight(1, function(err, state) {
                   	light1Matrix = state.matrix;
 
                   });
                   light1Matrix[12] = this.value;
+
+
                   myApi.setLight(1,{
                   	matrix:light1Matrix
 
                   });	
+
+                  updateLight1HelperPosition();
+
+                  
                 }
 
                 light1PositionYSlider.oninput = function() {
+
                   //output.innerHTML = this.value;
                   myApi.getLight(1, function(err, state) {
                   	light1Matrix = state.matrix;
@@ -134,6 +198,7 @@
                   	matrix:light1Matrix
 
                   });	
+                  updateLight1HelperPosition();
                 }
 
                 light1PositionZSlider.oninput = function() {
@@ -147,6 +212,7 @@
                   	matrix:light1Matrix
 
                   });	
+                  updateLight1HelperPosition();
                 }
 
                 light2PositionXSlider.oninput = function() {
@@ -239,6 +305,14 @@
 
                     api.addEventListener('viewerready', function () {
 
+
+                      //log all nodes
+                      myApi.getNodeMap(function(err, nodes) {
+                          if (!err) {
+                              window.console.log(nodes); // [ ... ]
+                          }
+                      });
+
                     	//get light APIs
                     	myApi.getLight(0, function(err, state) {
                     		light3Matrix = state.matrix;
@@ -260,6 +334,9 @@
                     		light2PositionYSlider.value = light2Matrix[13];
                     		light2PositionZSlider.value = light2Matrix[14];
                     	});
+
+
+
 
                     	console.log('Viewer is ready');
                       // once the viewer is ready, show the iframe
@@ -697,19 +774,19 @@
   <button id="light1">Light 1</button>
   <p>X position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionXSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light1PositionXSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
   </div>
 
   <p>Y position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionYSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light1PositionYSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
   </div>
 
   <p>Z position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light1PositionZSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light1PositionZSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
   </div>
 
