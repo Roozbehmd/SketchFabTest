@@ -67,6 +67,8 @@
 
               var myApi;
 
+              var ambientShadows = true;
+
 
               //MATERIAL TEXTURE STUFF
               var getColorAsTextureURL = function getColorAsTextureURL(color) {
@@ -488,29 +490,26 @@
                         myMaterialsAreBlue = !myMaterialsAreBlue;
                       });
 
-                      document.getElementById('wireframe').addEventListener('click', function () {
-
-                        api.getWireframe(function(err, state) {
-                          if (state.enabled) {
-                            api.setWireframe(false, {color: 'FF0000FF'}, function(err) {
-                              if (!err) {
-                                window.console.log('Set wireframe');
-                              }
-                            });
-
-                          }
-                          else{
-                            api.setWireframe(true, {color: 'FF0000FF'}, function(err) {
-                              if (!err) {
-                                window.console.log('Set wireframe');
-                              }
-                            });
-                          }
-                        });
 
 
-
-                      });
+                      // document.getElementById('wireframe').addEventListener('click', function () {
+                      //   api.getWireframe(function(err, state) {
+                      //     if (state.enabled) {
+                      //       api.setWireframe(false, {color: 'FF0000FF'}, function(err) {
+                      //         if (!err) {
+                      //           window.console.log('Set wireframe');
+                      //         }
+                      //       });
+                      //     }
+                      //     else{
+                      //       api.setWireframe(true, {color: 'FF0000FF'}, function(err) {
+                      //         if (!err) {
+                      //           window.console.log('Set wireframe');
+                      //         }
+                      //       });
+                      //     }
+                      //   });
+                      // });
 
 
                       document.getElementById('on').addEventListener('click', function () {
@@ -584,6 +583,26 @@
                         }
                      });
 
+                       document.getElementById('ambientShadows').addEventListener('click', function () {
+
+                        // api.getEnvironment(function(err, envInfo) {
+                        //     ambientShadows = envInfo.shadowEnabled;
+                        // });
+
+                        ambientShadows = !ambientShadows;
+
+
+                           api.setEnvironment({
+                                //enabled: false,
+                                //uid: '3a68a92a99d849b19829e315b93e6d55',
+                                // exposure: prevExposure,
+                                //lightIntensity: prevLightIntensity,
+                                //rotation: 4,
+                                //blur: 0.1,
+                                shadowEnabled: ambientShadows
+                              }, );
+                      });
+
                        document.getElementById('offExposure').addEventListener('click', function () {
                          
 
@@ -644,6 +663,19 @@
                                 }
                           texturesAreEnabled = !texturesAreEnabled;
 
+
+                      });
+
+                      document.getElementById('screenshot').addEventListener('click', function () {
+
+                        api.getScreenShot(3840 , 2160, 'image/png', function (err, result) {
+                                var anchor = document.createElement('a');
+                                anchor.href = result;
+                                anchor.download = 'screenshot.png';
+                                anchor.innerHTML = '<img width="100" height="100" src=' + result + '>download';
+                                // document.getElementById('screenshot').appendChild(anchor);
+                                anchor.click();
+                              });
 
                       });
 
@@ -763,11 +795,21 @@
 <x-col span="1">
  <article id="description">
   <h1>SKETCHFAB</h1>
-  <button id="shownodes" onclick="loadmodel()">CLICK to load model</button>
+  <button id="shownodes" onclick="loadmodel()">CLICK to load model / RESET</button>
+  <button id="screenshot">Take ScreenShot</button>
+
+
   <button id="on">Increase Light</button>
   <button id="off">Decrease Light</button>
   <button id="onExposure">Increase Exposure</button>
   <button id="offExposure">Decrease Exposure</button>
+  
+  <button id="background">Background</button>
+  <!-- <button id="wireframe">Wireframe</button> -->
+  <button id="ambientShadows">Ambient Shadows</button>
+  <button id="removePart">Remove Object</button>
+  <button id="blueMaterial">Blue Material</button>
+  <button id="removeTextures">Remove Textures</button>
 
 <!-- Light 1 -->
   <h2>Light 1</h2>
@@ -833,11 +875,6 @@
   <button id="light3Rand">Light 3 Random Color</button>
   <!-- <button id="light3Move">Light 3 Random Position</button> -->
 
-  <button id="background">Background</button>
-  <button id="wireframe">Wireframe</button>
-  <button id="removePart">Remove Object</button>
-  <button id="blueMaterial">Blue Material</button>
-  <button id="removeTextures">Remove Textures</button>
 
 
 
