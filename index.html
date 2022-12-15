@@ -64,6 +64,9 @@
               var light3Matrix; 
 
               var light1HelperNode = 34;
+              var light2HelperNode = 34;
+              var light3HelperNode = 34;
+
 
               var myApi;
 
@@ -143,6 +146,56 @@
                 });
               }
 
+              function updateLight2HelperPosition(){
+                
+                myApi.getMatrix(light2HelperNode, function(err, matrix) {
+                    if (!err) {
+                        //window.console.log('Matrix:', matrix);
+                    }
+                    if (err) {
+                        window.console.log(err);
+                    }
+                });
+
+                window.console.log(light2Matrix[12], ' ', light2Matrix[13], ' ', light2Matrix[14]);
+                myApi.translate(light2HelperNode, [light2Matrix[12]*100,light2Matrix[14]*100,light2Matrix[13]*-100], {
+                    // duration: 0.1,
+                    // easing: 'easeOutQuad'
+                }, function(err, translateTo) {
+                    if (!err) {
+                        // window.console.log('Object has been translated to', translateTo);
+                    }
+                    if (err) {
+                        window.console.log(err);
+                    }
+                });
+              }
+
+              function updateLight3HelperPosition(){
+                
+                myApi.getMatrix(light3HelperNode, function(err, matrix) {
+                    if (!err) {
+                        //window.console.log('Matrix:', matrix);
+                    }
+                    if (err) {
+                        window.console.log(err);
+                    }
+                });
+
+                window.console.log(light3Matrix[12], ' ', light3Matrix[13], ' ', light3Matrix[14]);
+                myApi.translate(light3HelperNode, [light3Matrix[12]*100,light3Matrix[14]*100,light3Matrix[13]*-100], {
+                    // duration: 0.1,
+                    // easing: 'easeOutQuad'
+                }, function(err, translateTo) {
+                    if (!err) {
+                        // window.console.log('Object has been translated to', translateTo);
+                    }
+                    if (err) {
+                        window.console.log(err);
+                    }
+                });
+              }
+
 							function loadmodel() {
 								document.addEventListener('load', () => console.log('viewerready'));
 
@@ -171,14 +224,14 @@
                 light1PositionXSlider.oninput = function() {
 
 
-                  myApi.getLight(1, function(err, state) {
-                  	light1Matrix = state.matrix;
+                  // myApi.getLight(0, function(err, state) {
+                  // 	light1Matrix = state.matrix;
 
-                  });
+                  // });
                   light1Matrix[12] = this.value;
 
 
-                  myApi.setLight(1,{
+                  myApi.setLight(0,{
                   	matrix:light1Matrix
 
                   });	
@@ -191,12 +244,12 @@
                 light1PositionYSlider.oninput = function() {
 
                   //output.innerHTML = this.value;
-                  myApi.getLight(1, function(err, state) {
-                  	light1Matrix = state.matrix;
+                  // myApi.getLight(0, function(err, state) {
+                  // 	light1Matrix = state.matrix;
 
-                  });
+                  // });
                   light1Matrix[13] = this.value;
-                  myApi.setLight(1,{
+                  myApi.setLight(0,{
                   	matrix:light1Matrix
 
                   });	
@@ -205,12 +258,12 @@
 
                 light1PositionZSlider.oninput = function() {
                   //output.innerHTML = this.value;
-                  myApi.getLight(1, function(err, state) {
-                  	light1Matrix = state.matrix;
+                  // myApi.getLight(0, function(err, state) {
+                  // 	light1Matrix = state.matrix;
 
-                  });
+                  // });
                   light1Matrix[14] = this.value;
-                  myApi.setLight(1,{
+                  myApi.setLight(0,{
                   	matrix:light1Matrix
 
                   });	
@@ -219,80 +272,116 @@
 
                 light2PositionXSlider.oninput = function() {
                   //output.innerHTML = this.value;
-                  myApi.getLight(2, function(err, state) {
-                  	light2Matrix = state.matrix;
+                  // myApi.getLight(1, function(err, state) {
+                  // 	light2Matrix = state.matrix;
 
-                  });
+                  // });
                   light2Matrix[12] = this.value;
-                  myApi.setLight(2,{
+                  myApi.setLight(1,{
                   	matrix:light2Matrix
 
                   });	
+
+                  updateLight2HelperPosition();
+
                 }
 
                 light2PositionYSlider.oninput = function() {
                   //output.innerHTML = this.value;
-                  myApi.getLight(2, function(err, state) {
-                  	light2Matrix = state.matrix;
+                  // myApi.getLight(1, function(err, state) {
+                  // 	light2Matrix = state.matrix;
 
-                  });
+                  // });
                   light2Matrix[13] = this.value;
-                  myApi.setLight(2,{
+                  myApi.setLight(1,{
                   	matrix:light2Matrix
 
                   });	
+                  updateLight2HelperPosition();
+
                 }
 
                 light2PositionZSlider.oninput = function() {
                   //output.innerHTML = this.value;
-                  myApi.getLight(2, function(err, state) {
-                  	light2Matrix = state.matrix;
+                  // myApi.getLight(1, function(err, state) {
+                  // 	light2Matrix = state.matrix;
 
-                  });
+                  // });
                   light2Matrix[14] = this.value;
-                  myApi.setLight(2,{
+                  myApi.setLight(1,{
                   	matrix:light2Matrix
 
                   });	
+                  updateLight2HelperPosition();
+
                 }
 
                 light3PositionXSlider.oninput = function() {
                   //output.innerHTML = this.value;
-                  myApi.getLight(0, function(err, state) {
-                  	light3Matrix = state.matrix;
+                  // myApi.getLight(2, function(err, state) {
+                  // 	light3Matrix = state.matrix;
 
-                  });
+                  // });
                   light3Matrix[12] = this.value;
-                  myApi.setLight(0,{
+                  myApi.setLight(2,{
                   	matrix:light3Matrix
 
                   });	
+                  updateLight3HelperPosition();
                 }
 
                 light3PositionYSlider.oninput = function() {
                   //output.innerHTML = this.value;
-                  myApi.getLight(0, function(err, state) {
-                  	light3Matrix = state.matrix;
+                  // myApi.getLight(2, function(err, state) {
+                  // 	light3Matrix = state.matrix;
 
-                  });
+                  // });
                   light3Matrix[13] = this.value;
-                  myApi.setLight(0,{
+                  myApi.setLight(2,{
                   	matrix:light3Matrix
 
                   });	
+                  updateLight3HelperPosition();
                 }
 
                 light3PositionZSlider.oninput = function() {
                   //output.innerHTML = this.value;
-                  myApi.getLight(0, function(err, state) {
-                  	light3Matrix = state.matrix;
+                  // myApi.getLight(2, function(err, state) {
+                  // 	light3Matrix = state.matrix;
 
-                  });
+                  // });
                   light3Matrix[14] = this.value;
-                  myApi.setLight(0,{
+                  myApi.setLight(2,{
                   	matrix:light3Matrix
 
                   });	
+                  updateLight3HelperPosition();
+                }
+
+                light3RotationXSlider.oninput = function() {
+                  
+
+                    light3Matrix[8] = this.value;
+                    myApi.setLight(2,{
+                      matrix:light3Matrix
+
+                    }); 
+                }
+
+                light3RotationYSlider.oninput = function() {
+                  light3Matrix[9] = this.value;
+                  myApi.setLight(2,{
+                    matrix:light3Matrix
+
+                  }); 
+                }
+
+                light3RotationZSlider.oninput = function() {
+                  light3Matrix[10] = this.value;
+                  myApi.setLight(2,{
+                    matrix:light3Matrix
+
+                  }); 
                 }
 
                 client.init(uid, {
@@ -317,25 +406,32 @@
 
                     	//get light APIs
                     	myApi.getLight(0, function(err, state) {
-                    		light3Matrix = state.matrix;
-                    		light3PositionXSlider.value = light3Matrix[12];
-                    		light3PositionYSlider.value = light3Matrix[13];
-                    		light3PositionZSlider.value = light3Matrix[14];
-                    	});
-
-                    	myApi.getLight(1, function(err, state) {
                     		light1Matrix = state.matrix;
                     		light1PositionXSlider.value = light1Matrix[12];
                     		light1PositionYSlider.value = light1Matrix[13];
                     		light1PositionZSlider.value = light1Matrix[14];
                     	});
 
-                    	myApi.getLight(2, function(err, state) {
+                    	myApi.getLight(1, function(err, state) {
                     		light2Matrix = state.matrix;
                     		light2PositionXSlider.value = light2Matrix[12];
                     		light2PositionYSlider.value = light2Matrix[13];
                     		light2PositionZSlider.value = light2Matrix[14];
                     	});
+
+                    	myApi.getLight(2, function(err, state) {
+                    		light3Matrix = state.matrix;
+                    		light3PositionXSlider.value = light3Matrix[12];
+                    		light3PositionYSlider.value = light3Matrix[13];
+                    		light3PositionZSlider.value = light3Matrix[14];
+                    	});
+
+                      myApi.getLight(3, function(err, state) {
+                        light3Matrix = state.matrix;
+                        light3PositionXSlider.value = light3Matrix[12];
+                        light3PositionYSlider.value = light3Matrix[13];
+                        light3PositionZSlider.value = light3Matrix[14];
+                      });
 
 
 
@@ -368,6 +464,27 @@
 
                       document.getElementById('light1').addEventListener('click', function () {
 
+                        api.getLight(0, function(err, state) {
+                          if(state.enabled){
+                            api.setLight(0, {
+                              enabled: false
+                                //color: [1,0,0]
+                              });
+                          }
+
+                          else{
+                            api.setLight(0, {
+                              enabled: true
+                                //color: [1,0,0]
+                              });
+                          }
+                        });
+
+
+                      });
+
+                      document.getElementById('light2').addEventListener('click', function () {
+
                         api.getLight(1, function(err, state) {
                           if(state.enabled){
                             api.setLight(1, {
@@ -387,7 +504,7 @@
 
                       });
 
-                      document.getElementById('light2').addEventListener('click', function () {
+                      document.getElementById('light3').addEventListener('click', function () {
 
                         api.getLight(2, function(err, state) {
                           if(state.enabled){
@@ -408,35 +525,14 @@
 
                       });
 
-                      document.getElementById('light3').addEventListener('click', function () {
-
-                        api.getLight(0, function(err, state) {
-                          if(state.enabled){
-                            api.setLight(0, {
-                              enabled: false
-                                //color: [1,0,0]
-                              });
-                          }
-
-                          else{
-                            api.setLight(0, {
-                              enabled: true
-                                //color: [1,0,0]
-                              });
-                          }
-                        });
-
-
-                      });
-
                       document.getElementById('light3Rand').addEventListener('click', function () {
                       	var randR = Math.random();
                       	var randG = Math.random();
                       	var randB = Math.random();
-                      	var randA = Math.random();
+                      	// var randA = Math.random();
                       	var randColor = [randR, randG, randB, 1];
 
-                      	api.setLight(0, {
+                      	api.setLight(2, {
                       	      //enabled: false
                       	      color: randColor
                       	  });
@@ -476,19 +572,19 @@
 
                       // 	});
 
-                      document.getElementById('blueMaterial').addEventListener('click',function () {
+                      // document.getElementById('blueMaterial').addEventListener('click',function () {
                         
-                        for (var i = 0; i < myMaterials.length; i++) {
-                                var m = myMaterials[i]; // here change only the channel you need to change
+                      //   for (var i = 0; i < myMaterials.length; i++) {
+                      //           var m = myMaterials[i]; // here change only the channel you need to change
 
-                                m.channels.EmitColor.factor = 1;
-                                m.channels.EmitColor.enable = !myMaterialsAreBlue;
+                      //           m.channels.EmitColor.factor = 1;
+                      //           m.channels.EmitColor.enable = !myMaterialsAreBlue;
                                
-                                m.channels.EmitColor.color = [0.0, 0.0, 1.0];
-                                api.setMaterial(m);
-                        }
-                        myMaterialsAreBlue = !myMaterialsAreBlue;
-                      });
+                      //           m.channels.EmitColor.color = [0.0, 0.0, 1.0];
+                      //           api.setMaterial(m);
+                      //   }
+                      //   myMaterialsAreBlue = !myMaterialsAreBlue;
+                      // });
 
 
 
@@ -679,31 +775,31 @@
 
                       });
 
-                      document.getElementById('removePart').addEventListener('click', function () {
-                        var myNode = 0;
+                      // document.getElementById('removePart').addEventListener('click', function () {
+                      //   var myNode = 0;
 
 
-                        if(isMyNodeHidden){
-                          api.show(myNode, function(err) {
-                              if (!err) {
-                                  window.console.log('Hid node', myNode); // 114
-                                  isMyNodeHidden = false;
-                              }
-                          });
-                        }
+                      //   if(isMyNodeHidden){
+                      //     api.show(myNode, function(err) {
+                      //         if (!err) {
+                      //             window.console.log('Hid node', myNode); // 114
+                      //             isMyNodeHidden = false;
+                      //         }
+                      //     });
+                      //   }
 
-                        else{
-                          api.hide(myNode, function(err) {
-                              if (!err) {
-                                  window.console.log('Showed node', myNode); // 114
-                                  isMyNodeHidden = true;
-                              }
-                          });
-                        }
+                      //   else{
+                      //     api.hide(myNode, function(err) {
+                      //         if (!err) {
+                      //             window.console.log('Showed node', myNode); // 114
+                      //             isMyNodeHidden = true;
+                      //         }
+                      //     });
+                      //   }
 
 
 
-                      });
+                      // });
 
                       document.getElementById('off').addEventListener('click', function () {
                       	
@@ -807,9 +903,11 @@
   <button id="background">Background</button>
   <!-- <button id="wireframe">Wireframe</button> -->
   <button id="ambientShadows">Ambient Shadows</button>
-  <button id="removePart">Remove Object</button>
-  <button id="blueMaterial">Blue Material</button>
+  <!-- <button id="removePart">Remove Object</button> -->
+  <!-- <button id="blueMaterial">Blue Material</button> -->
   <button id="removeTextures">Remove Textures</button>
+  <button id="light3Rand">Light 3 Random Color</button>
+
 
 <!-- Light 1 -->
   <h2>Light 1</h2>
@@ -836,19 +934,19 @@
   <button id="light2">Light 2</button>
   <p>X position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionXSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light2PositionXSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
   </div>
 
   <p>Y position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionYSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light2PositionYSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
   </div>
 
   <p>Z position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light2PositionZSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light2PositionZSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
   </div>
 
@@ -857,22 +955,39 @@
   <button id="light3">Light 3</button>
   <p>X position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionXSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light3PositionXSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
   </div>
 
   <p>Y position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionYSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light3PositionYSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
   </div>
 
   <p>Z position</p>
   <div class="slidecontainer" >
-    <input type="range" min="-100" max="100" value="50" class="slider" id="light3PositionZSlider">
+    <input type="range" min="-10" max="10" value="0" class="slider" id="light3PositionZSlider" step="0.1">
     <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
   </div>
-  <button id="light3Rand">Light 3 Random Color</button>
+
+  <p>X Rotation</p>
+  <div class="slidecontainer" >
+    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationXSlider" step="0.1">
+    <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
+  </div>
+
+  <p>Y Rotation</p>
+  <div class="slidecontainer" >
+    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationYSlider" step="0.1">
+    <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
+  </div>
+
+  <p>Z Rotation</p>
+  <div class="slidecontainer" >
+    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationZSlider" step="0.1">
+    <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
+  </div>
   <!-- <button id="light3Move">Light 3 Random Position</button> -->
 
 
