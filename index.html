@@ -419,18 +419,15 @@
                     		light2PositionZSlider.value = light2Matrix[14];
                     	});
 
-                    	myApi.getLight(2, function(err, state) {
-                    		light3Matrix = state.matrix;
-                    		light3PositionXSlider.value = light3Matrix[12];
-                    		light3PositionYSlider.value = light3Matrix[13];
-                    		light3PositionZSlider.value = light3Matrix[14];
-                    	});
 
-                      myApi.getLight(3, function(err, state) {
+                      myApi.getLight(2, function(err, state) {
                         light3Matrix = state.matrix;
                         light3PositionXSlider.value = light3Matrix[12];
                         light3PositionYSlider.value = light3Matrix[13];
                         light3PositionZSlider.value = light3Matrix[14];
+                        light3RotationXSlider.value = light3Matrix[8];
+                        light3RotationYSlider.value = light3Matrix[9];
+                        light3RotationZSlider.value = light3Matrix[10];
                       });
 
 
@@ -973,19 +970,19 @@
 
   <p>X Rotation</p>
   <div class="slidecontainer" >
-    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationXSlider" step="0.1">
+    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationXSlider" step="0.01">
     <!-- <p>Value: <span id="light3PositionXSliderValue"></span></p> -->
   </div>
 
   <p>Y Rotation</p>
   <div class="slidecontainer" >
-    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationYSlider" step="0.1">
+    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationYSlider" step="0.01">
     <!-- <p>Value: <span id="light3PositionYSliderValue"></span></p> -->
   </div>
 
   <p>Z Rotation</p>
   <div class="slidecontainer" >
-    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationZSlider" step="0.1">
+    <input type="range" min="-1" max="1" value="0" class="slider" id="light3RotationZSlider" step="0.01">
     <!-- <p>Value: <span id="light3PositionZSliderValue"></span></p> -->
   </div>
   <!-- <button id="light3Move">Light 3 Random Position</button> -->
