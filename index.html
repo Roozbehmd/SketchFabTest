@@ -50,7 +50,7 @@
               var canvas = document.createElement('canvas');
 
               var ctx = canvas.getContext('2d');
-							var uid = 'cc4eac6847b84ecbbfcd6cd5f25f136e';
+							var uid = 'd046cced75be4749875d4a4457d42887';
 							var client = null;
 							var material;
 							var prevLightIntensity = 3;
@@ -62,6 +62,7 @@
               var light1Matrix; 
               var light2Matrix; 
               var light3Matrix; 
+              var sliderAmplifier = 100;
 
               var light1HelperNode = 34;
               var light2HelperNode = 34;
@@ -228,7 +229,7 @@
                   // 	light1Matrix = state.matrix;
 
                   // });
-                  light1Matrix[12] = this.value;
+                  light1Matrix[12] = this.value*sliderAmplifier;
 
 
                   myApi.setLight(0,{
@@ -248,7 +249,7 @@
                   // 	light1Matrix = state.matrix;
 
                   // });
-                  light1Matrix[13] = this.value;
+                  light1Matrix[13] = this.value*sliderAmplifier;
                   myApi.setLight(0,{
                   	matrix:light1Matrix
 
@@ -262,7 +263,7 @@
                   // 	light1Matrix = state.matrix;
 
                   // });
-                  light1Matrix[14] = this.value;
+                  light1Matrix[14] = this.value*sliderAmplifier;
                   myApi.setLight(0,{
                   	matrix:light1Matrix
 
@@ -276,7 +277,7 @@
                   // 	light2Matrix = state.matrix;
 
                   // });
-                  light2Matrix[12] = this.value;
+                  light2Matrix[12] = this.value*sliderAmplifier;
                   myApi.setLight(1,{
                   	matrix:light2Matrix
 
@@ -292,7 +293,7 @@
                   // 	light2Matrix = state.matrix;
 
                   // });
-                  light2Matrix[13] = this.value;
+                  light2Matrix[13] = this.value*sliderAmplifier;
                   myApi.setLight(1,{
                   	matrix:light2Matrix
 
@@ -307,7 +308,7 @@
                   // 	light2Matrix = state.matrix;
 
                   // });
-                  light2Matrix[14] = this.value;
+                  light2Matrix[14] = this.value*sliderAmplifier;
                   myApi.setLight(1,{
                   	matrix:light2Matrix
 
@@ -322,7 +323,7 @@
                   // 	light3Matrix = state.matrix;
 
                   // });
-                  light3Matrix[12] = this.value;
+                  light3Matrix[12] = this.value*sliderAmplifier;
                   myApi.setLight(2,{
                   	matrix:light3Matrix
 
@@ -336,7 +337,7 @@
                   // 	light3Matrix = state.matrix;
 
                   // });
-                  light3Matrix[13] = this.value;
+                  light3Matrix[13] = this.value*sliderAmplifier;
                   myApi.setLight(2,{
                   	matrix:light3Matrix
 
@@ -350,7 +351,7 @@
                   // 	light3Matrix = state.matrix;
 
                   // });
-                  light3Matrix[14] = this.value;
+                  light3Matrix[14] = this.value*sliderAmplifier;
                   myApi.setLight(2,{
                   	matrix:light3Matrix
 
